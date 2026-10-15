@@ -14,17 +14,18 @@ It only answers Python questions, streams replies word by word, and remembers yo
 ## Project Structure
 
 ```
-├── app.py            # Streamlit UI + chat loop
+├── streamlit_app.py  # Streamlit UI + chat loop
 ├── llm.py            # Groq client, streaming call, history trimming
 ├── prompts.py        # System prompt (PyTutor rules)
 ├── requirements.txt  # Dependencies
-└── .env              # Your GROQ_API_KEY (not committed)
+└── .streamlit/
+    └── secrets.toml  # Your GROQ_API_KEY (not committed)
 ```
 
 ## How It Works
 
 ```
-User ──► app.py (Streamlit) ──► llm.py ──► Groq API (openai/gpt-oss-120b)
+User ──► streamlit_app.py ──► llm.py ──► Groq API (openai/gpt-oss-120b)
             ▲                                   │
             └──────── streamed response ◄───────┘
 ```
@@ -58,16 +59,18 @@ uv pip install -r requirements.txt
 
 ### 3. Add your Groq API key
 
-Get a free key from [console.groq.com](https://console.groq.com/keys) and create a `.env` file:
+Get a free key from [console.groq.com](https://console.groq.com/keys) and create `.streamlit/secrets.toml`:
 
+```toml
+GROQ_API_KEY = "your_groq_api_key_here"
 ```
-GROQ_API_KEY=your_groq_api_key_here
-```
+
+The app reads it with `st.secrets["GROQ_API_KEY"]`. This file is in `.gitignore`, so your key is never pushed.
 
 ### 4. Run the app
 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 Open http://localhost:8501 in your browser.
@@ -76,11 +79,12 @@ Open http://localhost:8501 in your browser.
 
 1. Push this repo to GitHub.
 2. Go to [share.streamlit.io](https://share.streamlit.io) and click **Create app**.
-3. Select this repo, branch `main`, and main file `app.py`.
+3. Select this repo, branch `main`, and main file `streamlit_app.py`.
 4. In **Advanced settings → Secrets**, add:
    ```toml
    GROQ_API_KEY = "your_groq_api_key_here"
    ```
+   (same format as your local `secrets.toml`)
 5. Click **Deploy** 🚀
 
 ## Tech Stack

@@ -1,13 +1,10 @@
-import os
-
-from dotenv import load_dotenv
+import streamlit as st
 from groq import Groq
-
-load_dotenv()
 
 MODEL = "openai/gpt-oss-120b"
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+# API key comes from .streamlit/secrets.toml locally, or the Secrets settings on Streamlit Cloud
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 
 def history(messages):
